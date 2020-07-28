@@ -1,31 +1,46 @@
 class Triangle
-  attr_reader :side1, :side2, :side3
-  def initialize(side1, side2, side3)
-    @side1 = side1
-    @side2 = side2
-    @side3 = side3
+  attr_reader :a, :b, :c
+  def initialize(a, b, c)
+    @a = a
+    @b = b
+    @c = c
   end
 
   def kind
     validate_triangle
-    if side1 == side2 && side1 == side3
+    if a == b && b == c
       :equilateral
-    elsif side1 == side2 || side2 == side3 || side1 == side3
+    elsif a == b || b == c || a == c
       :isosceles
     else
       :scalene
     end
   end
 
+  def positive_sides
+    pos=true 
+    pos=false if a<0
+    pos=false if b<0
+    pos=false if c<0
+    pos
+  end
+
+  def is_triangle 
+    a+b > c && b+c > a && c+a > b
+  end
+
   def validate_triangle
-    real_triangle = [(side1 + side2 > side3), (side1 + cside3> side2), (side2 + side3 > side1)]
-    [side1, side2, side3].each do |side|
-      real_triangle << false if side <= 0 
-    raise TriangleError if real_triangle=true
-    end
+    vt=true
+    vt =false if positive_sides ==false
+    vt=false if is_triangle == false
+    raise TriangleError if vt == false
   end
 
   class TriangleError < StandardError
+    def message 
+      "Bad Bad Bad Triangle"
+    end
   end
 
 end
+
